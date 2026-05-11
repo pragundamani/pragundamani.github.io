@@ -5,14 +5,8 @@ title: Home
 
 # Home
 
-## Add content fast
-
-- New blog post: create `_posts/YYYY-MM-DD-title.md`
-- New note: create `_notes/title.md`
-- New standalone tool/page: add the file in the repo root, then link it below
-
 ## Pages
-
+- [OOP c++ practice](/oops.html)
 - [Mobile physics practice page](/mobile-physics.html)
 - [Notes](/notes/)
 
