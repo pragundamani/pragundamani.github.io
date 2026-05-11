@@ -864,7 +864,10 @@
     function normalizeBlock(text) {
       return String(text || '')
         .replace(/\r\n/g, '\n')
-        .replace(/\t/g, '    ');
+        .replace(/\t/g, '    ')
+        .split('\n')
+        .map(line => line.replace(/^( +)/, spaces => ' '.repeat(spaces.length * 2)))
+        .join('\n');
     }
 
     function renderIndentedBlock(text, className = '') {
