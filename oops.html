@@ -243,6 +243,7 @@
       white-space: pre-wrap;
       word-break: break-word;
       font: 13px/1.45 ui-monospace, monospace;
+      tab-size: 4;
     }
     .options {
       display: grid;
@@ -272,6 +273,8 @@
       color: var(--muted);
       border-radius: 0 12px 12px 0;
       white-space: pre-wrap;
+      tab-size: 4;
+      font: 13px/1.45 ui-monospace, monospace;
     }
     .check-result {
       margin-top: 10px;
@@ -858,6 +861,17 @@
       return answerKeyMap[file] && answerKeyMap[file][Number(q)] ? answerKeyMap[file][Number(q)] : '';
     }
 
+    function normalizeBlock(text) {
+      return String(text || '')
+        .replace(/\r\n/g, '\n')
+        .replace(/\t/g, '    ');
+    }
+
+    function renderIndentedBlock(text, className = '') {
+      const normalized = normalizeBlock(text);
+      return `<pre${className ? ` class="${className}"` : ''}>${escapeHtml(normalized)}</pre>`;
+    }
+
     function syncSidebarButtons() {
       const collapsed = sidebar.classList.contains('collapsed');
       layout.classList.toggle('sidebar-hidden', collapsed);
@@ -999,7 +1013,7 @@
                   <label class="done-toggle"><input type="checkbox" class="check-question" ${checked ? 'checked' : ''}> Done</label>
                 </div>
               </div>
-              ${item.code ? `<pre>${escapeHtml(item.code)}</pre>` : ''}
+              ${item.code ? renderIndentedBlock(item.code) : ''}
               <div class="options">${options}</div>
               ${item.selected ? `<div class="hint">Visible scanned answer: ${escapeHtml(item.selected)}</div>` : ''}
               <div class="check-result"></div>
@@ -1023,8 +1037,8 @@
                   <label class="done-toggle"><input type="checkbox" class="check-question" ${checked ? 'checked' : ''}> Done</label>
                 </div>
               </div>
-              ${item.sample ? `<pre>${escapeHtml(item.sample)}</pre>` : ''}
-              ${item.answer ? `<div class="answer"><strong>Scanned answer summary:</strong> ${escapeHtml(item.answer)}</div>` : ''}
+              ${item.sample ? renderIndentedBlock(item.sample) : ''}
+              ${item.answer ? `<div class="answer"><strong>Scanned answer summary:</strong>\n${escapeHtml(normalizeBlock(item.answer))}</div>` : ''}
               <div class="check-result"></div>
               ${runnerMarkup(seed)}
             </article>`;
