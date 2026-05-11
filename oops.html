@@ -610,6 +610,75 @@
           { q: 11, prompt: "Define `Employee` with name, optional boss, sub-employees, add/remove team members, and output operator.", sample: "No heap or copy control required.", answer: "" },
           { q: 12, prompt: "For `Book` storing a dynamically allocated string title, implement ctor, copy ctor, copy assignment operator, and destructor.", sample: "", answer: "" }
         ]
+      },
+      {
+        file: "FA24 CS2124 Final-1.pdf",
+        title: "Polytechnic Tutoring Center Final Exam Review, Fall 2024",
+        mcq: [
+          { q: 1, prompt: "What is the result of the `A/B/C` program where `B::display_string()` uses `get_string()` and `C::display_string()` tries to print `aString` directly?", code: "class A {\nprivate:\n  string aString;\nprotected:\n  const string& get_string() const {\n    return aString;\n  }\npublic:\n  A(const string& anotherString) : aString(anotherString) {}\n};\nclass B : public A {\npublic:\n  B(const string& otherString) : A(otherString) {}\n  void display_string() const {\n    cout << get_string() << endl;\n  }\n};\nclass C : public A {\npublic:\n  C(const string& anotherotherString) : A(anotherotherString) {}\n  void display_string() const {\n    cout << aString << endl;\n  }\n};\nint main() {\n  A a(\"A\");\n  B b(\"B\");\n  C c(\"C\");\n  b.display_string();\n  c.display_string();\n}", options: ["Runtime error as a result of Class B's display_string method", "Runtime error as a result of Class C's display_string method", "The output: B then C", "Compilation error as a result of Class C's display_string method", "Compilation error as a result of Class B's display_string method"], selected: "" },
+          { q: 2, prompt: "What does the following code result in, and what key concept is used?", code: "class A {\nprivate:\n  string aString;\npublic:\n  A(const string& anotherString) : aString(anotherString) {}\n};\nclass B : public A {\npublic:\n  B(const string& otherString) : A(otherString) {}\n};\nint main() {\n  A* b = new B(\"B\"); // line A\n  B* a = new A(\"A\"); // line B\n}", options: ["Results in a compilation error at line A; polymorphism", "Results in a compilation error at line B; polymorphism", "Results in a compilation error at line A; abstraction", "Results in a compilation error at line B; abstraction"], selected: "" },
+          { q: 3, prompt: "What will be the output of deleting `A* a = new B(\"B\");` and `B* b = new B(\"B2\");` when `A` and `B` both define destructors but `A`'s is not virtual?", code: "class A {\nprivate:\n  string aString;\nprotected:\n  const string& get_string() const {\n    return aString;\n  }\npublic:\n  A(const string& anotherString) : aString(anotherString) {}\n  ~A() { cout << \"~A()\\n\"; }\n};\nclass B : public A {\npublic:\n  B(const string& otherString) : A(otherString) {}\n  void display_string() const {\n    cout << get_string() << endl;\n  }\n  ~B() { cout << \"~B()\\n\"; }\n};\nint main() {\n  A* a = new B(\"B\");\n  B* b = new B(\"B2\");\n  delete a;\n  delete b;\n}", options: ["~A() then ~B()", "~A() then ~B() then ~A()", "~B() then ~A() then ~B()", "~B() then ~A() then ~B() then ~A()", "~A() then ~B() then ~A() then ~B()"], selected: "" },
+          { q: 4, prompt: "What is the output of constructing `list<int> li(3 + vi.begin(), vi.end());` from `vector<int> vi = { 10, 2, 4, 1, 5, 3, 7, 9, 8, 6 };` and printing `li`?", code: "vector<int> vi = { 10, 2, 4, 1, 5, 3, 7, 9, 8, 6 };\nlist<int> li(3 + vi.begin(), vi.end());\nfor (int elem : li) {\n  cout << elem << \" \";\n}", options: ["`1 5 3 7 9 8 6`", "`10 2 4 1 5 3 7 9 8 6`", "`4 1 5 3 7 9 8 6`", "Compilation error", "Runtime error"], selected: "" }
+        ],
+        coding: [
+          { q: 5, prompt: "Write a templated function that finds a specified value within any container with an iterator, given the beginning, end, and target value. If not found, return a reasonable value.", sample: "template <typename Iter, typename T>\nIter find_value(Iter begin, Iter end, const T& target);", answer: "" },
+          { q: 6, prompt: "Write a recursive function that returns whether the string passed into the function is a palindrome.", sample: "You may use helper indices like low/high.", answer: "" },
+          { q: 7, prompt: "Given `struct TNode { int data = 0; TNode* left = nullptr; TNode* right = nullptr; };`, write a recursive function that frees all nodes in the tree.", sample: "Every `TNode` lives on the heap.", answer: "" },
+          { q: 8, prompt: "Write an `Iterator` class for a singly linked list, implementing pre/post increment and `operator==` / `operator!=`.", sample: "struct Node {\n  Node* next;\n  int data;\n  Node(Node* next = nullptr, int data = 0) : next(next), data(data) {}\n};", answer: "" }
+        ]
+      },
+      {
+        file: "(1) CS 1124 Final Review 2.0.pdf",
+        title: "CS 1124 Final Exam Review, Version 2.0",
+        mcq: [
+          { q: 1, prompt: "What is the output of constructing `UtensilSet myNewSet(\"Deluxe Set\", 30);` given the shown class definition?", code: "class UtensilSet {\npublic:\n  UtensilSet(string setName, int setSize) : setName(setName), setSize(setSize) {\n    cout << \"I have a new set of eating utensils!\";\n  }\nprivate:\n  int setSize;\n  string setName;\n  Fork* setForks;\n  Knife* setKnives;\n  Spoon* setSpoons;\n};\nclass Fork { /* Some Code */ };\nclass Knife { /* Some Code */ };\nclass Spoon { /* Some Code */ };\nint main() {\n  UtensilSet myNewSet(\"Deluxe Set\", 30);\n}", options: ["I have a new set of eating utensils!", "Compilation Error", "Runtime Error (or some undefined behavior)", "This code will run without displaying anything"], selected: "" },
+          { q: 7, prompt: "What is the output of passing `Derived2` by value to `first(Base bp)` and then calling `test(bp);`?", code: "class Base {\npublic:\n  virtual void foo() { cout << \"Base foo - \"; }\n};\nclass Derived : public Base {\npublic:\n  void foo() { cout << \"Derived foo - \"; }\n};\nclass Derived2 : public Derived {\npublic:\n  void foo() { cout << \"Derived2 foo - \"; }\n};\nvoid test(Base b) {\n  cout << \"test(Base) - \";\n  b.foo();\n}\nvoid test(Derived d) {\n  cout << \"test(Derived) - \";\n  d.foo();\n}\nvoid test(Derived2 d2) {\n  cout << \"test(Derived2) - \";\n  d2.foo();\n}\nvoid first(Base bp) {\n  test(bp);\n}\nint main() {\n  Derived2 d2p;\n  first(d2p);\n}", options: ["test(Base) -", "test(Derived2) -", "test(Derived2) - Derived2 foo -", "test(Derived2) - Base foo -", "test(Base) - Base foo -", "test(Base) - Derived2 foo -", "This code will not compile", "Undefined behavior - numerous possibilities for the output.", "None of the above"], selected: "" }
+        ],
+        coding: [
+          { q: 2, prompt: "If Q1 errors, explain what must be done to make it run properly. Otherwise, overload the output operator for `UtensilSet` so `cout << myNewSet;` prints `Deluxe Set has a total of 30 utensils`.", sample: "Overload `operator<<` for `UtensilSet`.", answer: "" },
+          { q: 3, prompt: "Write a templated function called `getMin` which takes any two numbers of the same type and returns the smaller one.", sample: "You may assume the numbers are not equal.", answer: "" },
+          { q: 4, prompt: "What is the output of the recursive `recurse(5)` function?", sample: "void recurse(int a) {\n  if (a < 20) {\n    cout << 'a';\n    for (int i = a; i > 1; i--) cout << 'b';\n    recurse(a * 2);\n    cout << 'c';\n  }\n}\nint main() { recurse(5); }", answer: "Expected output: `abbbbabbbbbbbbbabbbbbbbbbbbbbbbbbbbccc`." },
+          { q: 5, prompt: "What must be added to `Letter` so that `if (myLetter) cout << \"I have a Capital Letter\";` works using `isCapital(char)`?", sample: "Add the appropriate boolean conversion/operator to `Letter`.", answer: "" },
+          { q: 6, prompt: "Write a function called `double` that doubles the values of elements in a given vector, using iterators.", sample: "Your implementation must use iterators.", answer: "" },
+          { q: 8, prompt: "Write a recursive function that takes a character array and returns the number of items in the array.", sample: "", answer: "" },
+          { q: 9, prompt: "Write `findNext(Node* head, int target, int largest)` returning the next largest integer in a linked list after `target`, or `largest` if none is larger.", sample: "struct Node {\n  Node(int data = 0, Node* link = NULL) : data(data), link(link) {}\n  int data;\n  Node* link;\n};", answer: "" }
+        ]
+      },
+      {
+        file: "CS 1124 Final Review Answer 1.0.pdf",
+        title: "CS 1124 Final Exam Review Answer Key, Version 1.0",
+        mcq: [
+          { q: 1, prompt: "What is the result of `Base* bp = new Derived2(); bp->foo();` for the shown abstract-base hierarchy?", code: "class Base {\npublic:\n  virtual void foo() const = 0;\n};\nclass Derived1 : public Base {\npublic:\nprivate:\n};\nclass Derived2 : public Derived {\npublic:\n  virtual void foo() const {\n    cout << \"Derived2 - \";\n  }\n};\nint main() {\n  Base* bp = new Derived2();\n  bp->foo();\n}", options: ["Compilation error", "Runtime error", "Slicing", "Derived2 -", "Both a and c", "Both b and c"], selected: "" },
+          { q: 7, prompt: "What is the output of `Son kid; kid.display();` when `Son` inherits from both `Parent` and `Parent2`, each defining `display()`?", code: "class Parent {\npublic:\n  void display() const { cout << \"Parent display - \"; }\n  void foo() const { cout << \"Parent foo - \"; }\n};\nclass Parent2 {\npublic:\n  void display() const { cout << \"Parent2 display - \"; }\n  void foo() const { cout << \"Parent2 foo\\n\"; }\n};\nclass Son : public Parent, public Parent2 {\npublic:\n};\nint main() {\n  Son kid;\n  kid.display();\n}", options: ["Compilation error", "Runtime error (or other undefined behavior)", "Parent display -", "Parent2 display -", "Parent foo -", "Parent display - Parent2 display -", "Parent2 display - Parent display -"], selected: "" }
+        ],
+        coding: [
+          { q: 2, prompt: "What function is needed so that `Random r1; r1 + 501;` compiles, without overloading `+` again? Give only the prototype.", sample: "class Random {\npublic:\n  friend Random operator+(const Random&, const Random&);\nprivate:\n  int myNum;\n};", answer: "Answer key says to add a converting constructor such as `Random(int x = 5);`." },
+          { q: 3, prompt: "Given recursive function `foo`, what is the output of the call `foo(4)`?", sample: "void foo(int x) {\n  if (x > 1) {\n    cout << x << ':';\n    foo(x / 2);\n    for (int i = x; i > 0; i--) cout << ':';\n    cout << ',';\n    foo(x / 2);\n  }\n}", answer: "Answer key output: `4:2:::,::::,2:::,`." },
+          { q: 4, prompt: "Write a function template that takes two numbers `a` and `b` of the same type and returns `a^b`, assuming `b` is positive.", sample: "Remember that anything raised to the 0 power is 1.", answer: "Answer key uses an iterative template multiplying `answer` by `a`, `b` times." },
+          { q: 5, prompt: "Explain what happens when the `Elephant` copy constructor takes its parameter by value instead of `const Elephant&`.", sample: "class Elephant {\npublic:\n  Elephant(string name) : name(name) {}\n  ~Elephant();\n  Elephant(const Elephant rhs) {\n    cout << \"In Copy Constructor\\n\";\n  }\nprivate:\n  string name;\n  Elephant* myMate;\n};", answer: "Answer key: it causes a compiler error because copying `rhs` would require the copy constructor again recursively; the parameter should be `const Elephant&`." },
+          { q: 6, prompt: "Write `count(const vector<int>& a)` using iterators to return the number of items in the vector.", sample: "Use iterators to traverse the vector.", answer: "Answer key loops from `begin()` to `end()` and increments a counter." },
+          { q: 8, prompt: "Update `class Son` so that `kid2.foo();` outputs `Parent foo -`.", sample: "Use the previous `Parent` / `Parent2` / `Son` hierarchy.", answer: "Answer key: add `using Parent::foo;` inside `Son`." },
+          { q: 9, prompt: "Write a recursive function `add` that returns the sum of all items in a vector of `int`.", sample: "Answer key signature: `int add(const vector<int>& v, int start, int end)`.", answer: "Answer key uses `if (start == end) return v[start];` and otherwise `return v[start] + add(v, start + 1, end);`." },
+          { q: 10, prompt: "Write `sortList(Node* head, int largest)` that creates a new sorted linked list using the provided `findNext` function.", sample: "Use `struct Node { Node(int data = 0, Node* link = NULL) : data(data), link(link) {} int data; Node* link; };` and assume `findNext` is already implemented.", answer: "Answer key builds a new list starting with `findNext(head, 0, largest)` and repeatedly appends the next larger value until the original list length is exhausted." }
+        ]
+      },
+      {
+        file: "SP26 CS2124 Final Mock Exam.docx",
+        title: "Final Exam Review - CS 2124, Spring 2026",
+        mcq: [
+          { q: 1, prompt: "Given classes `A`, `B`, and `C`, where `B` prints `get_string()` and `C` tries to print inherited member `aString` directly, what is the result of the program?", options: ["Runtime error as a result of Class B’s display_string method", "Runtime error as a result of Class C’s display_string method", "The output: B / C", "Compilation error as a result of Class C’s display_string method", "Compilation error as a result of Class B’s display_string method"], selected: "" },
+          { q: 2, prompt: "For `A* b = new B(\"B\");` and `B* a = new A(\"A\");`, what happens, and what key concept is involved?", options: ["Results in a compilation error at line A; polymorphism", "Results in a compilation error at line B; polymorphism", "Results in a compilation error at line A; abstraction", "Results in a compilation error at line B; abstraction"], selected: "" }
+        ],
+        coding: [
+          { q: 3, prompt: "What is the output of `vector<int> vi = {10,2,4,1,5,3,7,9,8,6}; list<int> li(3 + vi.begin(), vi.end());` and then printing all elements of `li`?", sample: "vector<int> vi = { 10, 2, 4, 1, 5, 3, 7, 9, 8, 6 };\nlist<int> li(3 + vi.begin(), vi.end());\nfor (int elem : li) {\n  cout << elem << \" \";\n}", answer: "Inferred output: `1 5 3 7 9 8 6`." },
+          { q: 4, prompt: "What is the output of deleting `A* a = new B(\"B\");` and `B* b = new B(\"B2\");` when `A` and `B` both define destructors?", sample: "The document asks for the output of deleting through both `A*` and `B*`.", answer: "Deleting through `A*` without a virtual destructor is undefined behavior; a common observed output is `~A()` for `delete a`, then `~B()` and `~A()` for `delete b`, but it is not guaranteed." },
+          { q: 5, prompt: "Write a templated function that finds a specified value in any container with iterators. Pass begin, end, and target value. Return a reasonable value if not found.", sample: "template <typename Iter, typename T>\nIter find_value(Iter begin, Iter end, const T& target);", answer: "" },
+          { q: 6, prompt: "Write a recursive palindrome function for a string; helper low/high indices are allowed.", sample: "", answer: "" },
+          { q: 7, prompt: "Given `struct TNode { int data = 0; TNode* left = nullptr; TNode* right = nullptr; };` and all nodes on the heap, write a recursive function that frees the entire tree.", sample: "", answer: "" },
+          { q: 8, prompt: "Write a non-const iterator class for a singly linked list, including pre-increment, post-increment, `==`, and `!=`.", sample: "struct Node {\n  Node* next;\n  int data;\n  Node(Node* next = nullptr, int data = 0) : next(next), data(data) {}\n};", answer: "" },
+          { q: 9, prompt: "Implement only the `RadarMap` class, derived from `MapScreen`, with: general constructor, full copy control, output operator, read-only index operator returning `const Coordinate*` or `nullptr`, `find()` method, and boolean conversion for display status.", sample: "The prompt says `RadarMap` owns a dynamic array of 100 heap-allocated `Coordinate` objects initialized from a vector of 100 pointers.", answer: "" },
+          { q: 10, prompt: "Bonus: write a recursive function that prints the octal representation of a decimal number; the function returns `void`.", sample: "", answer: "" }
+        ]
       }
     ];
 
@@ -710,6 +779,24 @@
         4: "undefined",
         5: "compilation error",
         6: "`(*tp).item`"
+      },
+      "FA24 CS2124 Final-1.pdf": {
+        1: "Compilation error as a result of Class C's display_string method",
+        2: "Results in a compilation error at line B; polymorphism",
+        3: "~A() then ~B() then ~A()",
+        4: "`1 5 3 7 9 8 6`"
+      },
+      "(1) CS 1124 Final Review 2.0.pdf": {
+        1: "I have a new set of eating utensils!",
+        7: "test(Base) - Base foo -"
+      },
+      "CS 1124 Final Review Answer 1.0.pdf": {
+        1: "Derived2 -",
+        7: "Compilation error"
+      },
+      "SP26 CS2124 Final Mock Exam.docx": {
+        1: "Compilation error as a result of Class C’s display_string method",
+        2: "Results in a compilation error at line B; polymorphism"
       }
     };
 
