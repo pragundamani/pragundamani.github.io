@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS2124 Exam Practice</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a31;
+      --panel-2: #192443;
+      --text: #e7ecff;
+      --muted: #9ea9cf;
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --ok: #86efac;
+      --warn: #fbbf24;
+      --border: #2b3967;
+      --code: #0a0f1e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.45 system-ui, sans-serif;
+      background: radial-gradient(circle at top, #172347, var(--bg) 42%);
+      color: var(--text);
+    }
+    a { color: var(--accent); }
+    header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 13, 28, 0.82);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+    }
+    .header-copy {
+      flex: 1;
+      min-width: 0;
+    }
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    h1, h2, h3 { margin: 0 0 10px; }
+    p { margin: 0; color: var(--muted); }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+    .layout.sidebar-hidden {
+      grid-template-columns: 1fr;
+    }
+    .sidebar, .content {
+      background: rgba(18, 26, 49, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar {
+      padding: 18px;
+      height: fit-content;
+      position: sticky;
+      top: 108px;
+    }
+    .sidebar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .sidebar-head h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .sidebar.collapsed {
+      display: none;
+    }
+    .content {
+      padding: 18px;
+    }
+    label, .small {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    select, input[type="search"], textarea, button {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+    }
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      font: 13px/1.45 ui-monospace, monospace;
+      background: var(--code);
+    }
+    button {
+      cursor: pointer;
+      background: linear-gradient(135deg, #1e3a8a, #6d28d9);
+      border: none;
+      font-weight: 600;
+    }
+    button.secondary {
+      background: #23345f;
+      border: 1px solid var(--border);
+    }
+    button.inline {
+      width: auto;
+      padding: 8px 12px;
+      margin-top: 10px;
+      margin-right: 8px;
+    }
+    .filters {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stats {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .stat {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #10192f;
+    }
+    .exam-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      background: #0f1730;
+    }
+    .exam-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      background: linear-gradient(90deg, rgba(29, 78, 216, 0.18), rgba(109, 40, 217, 0.12));
+    }
+    .exam-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .section {
+      padding: 16px 18px;
+    }
+    .question {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: #121c36;
+    }
+    .qhead {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .qtitle {
+      flex: 1;
+      min-width: 0;
+    }
+    .question-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #0b1430;
+      color: var(--accent);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .done-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #0b1430;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+    .done-toggle input {
+      width: auto;
+      margin: 0;
+      accent-color: var(--ok);
+    }
+    .mini-btn {
+      width: auto;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #23345f;
+      border: 1px solid var(--border);
+    }
+    .mini-btn.toggle-sidebar {
+      flex: 0 0 auto;
+    }
+    pre {
+      margin: 10px 0 0;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--code);
+      border: 1px solid #1b2a54;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font: 13px/1.45 ui-monospace, monospace;
+    }
+    .options {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .option {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #0f1833;
+    }
+    .option input { width: auto; margin: 2px 0 0; }
+    .hint {
+      margin-top: 10px;
+      color: var(--warn);
+      font-size: 13px;
+    }
+    .answer {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent-2);
+      background: #10172f;
+      color: var(--muted);
+      border-radius: 0 12px 12px 0;
+      white-space: pre-wrap;
+    }
+    .check-result {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #10172f;
+      color: var(--muted);
+      display: none;
+      white-space: pre-wrap;
+    }
+    .check-result.show {
+      display: block;
+    }
+    .check-result.correct {
+      border-color: #2d5b43;
+      color: var(--ok);
+    }
+    .check-result.incorrect {
+      border-color: #6b3a3a;
+      color: #fca5a5;
+    }
+    .runner-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .runner-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .runner-actions button { width: auto; }
+    .output {
+      min-height: 140px;
+      background: var(--code);
+      border: 1px solid #1b2a54;
+      border-radius: 12px;
+      padding: 12px;
+      white-space: pre-wrap;
+      font: 13px/1.45 ui-monospace, monospace;
+    }
+    details.question-runner {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #0d1630;
+      overflow: hidden;
+    }
+    details.question-runner > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      color: var(--accent);
+      font-weight: 600;
+      user-select: none;
+      background: #101a36;
+      border-bottom: 1px solid transparent;
+    }
+    details.question-runner[open] > summary {
+      border-bottom-color: var(--border);
+    }
+    details.question-runner > summary::-webkit-details-marker {
+      display: none;
+    }
+    .runner-body {
+      padding: 12px;
+    }
+    .runner-note {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .question.done {
+      border-color: #2d5b43;
+      box-shadow: inset 0 0 0 1px rgba(134, 239, 172, 0.16);
+    }
+    .question.correct-state {
+      border-color: #2d5b43;
+      box-shadow: inset 0 0 0 1px rgba(134, 239, 172, 0.22);
+    }
+    .question.incorrect-state {
+      border-color: #7f1d1d;
+      box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.24);
+    }
+    @media (max-width: 1000px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div class="header-copy">
+        <h1>CS2124 Exam Practice</h1>
+        <p>Local single-file practice app for the PDFs in this folder. MCQs are interactive. Code snippets can be loaded into the runner and compiled via Wandbox using C++17.</p>
+      </div>
+      <div class="header-actions">
+        <button id="clearAnswersBtn" class="mini-btn" type="button">Clear Answers</button>
+        <button id="topbarSidebarBtn" class="mini-btn" type="button">Hide Filters</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h2>Filters</h2>
+        <button id="toggleSidebarBtn" class="mini-btn toggle-sidebar" type="button">Hide</button>
+      </div>
+      <div class="sidebar-body">
+        <div class="filters">
+          <div>
+            <label for="examFilter">Exam</label>
+            <select id="examFilter"></select>
+          </div>
+          <div>
+            <label for="typeFilter">Question type</label>
+            <select id="typeFilter">
+              <option value="all">All</option>
+              <option value="mcq">MCQ only</option>
+              <option value="coding">Coding only</option>
+            </select>
+          </div>
+          <div>
+            <label for="searchBox">Search</label>
+            <input id="searchBox" type="search" placeholder="Search prompt, code, options">
+          </div>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="content" id="content"></section>
+    </main>
+  </div>
+
+  <script>
+    const exams = [
+      {
+        file: "S2019Exam1.pdf",
+        title: "CS2124 Exam One, Spring 2019",
+        mcq: [
+          { q: 1, prompt: "Who created Java?", options: ["Gosling", "Hopper", "Ritchie", "Stroustrup", "Thompson", "van Rosum", "Wall", "None"], selected: "" },
+          { q: 2, prompt: "`p->x` means the same thing as:", options: ["`*p.x`", "`(*p).x`", "all of the above", "none of the above"], selected: "" },
+          { q: 3, prompt: "For `thingOne = thingTwo;`, what function call is it equivalent to?", options: ["`Thing& Thing::operator=(const Thing& rhs)`", "`operator=(thingTwo, thingOne)`", "`thingOne.operator=(thingTwo)`", "Either (b) or (c)", "None because it is using the copy constructor", "None of the above"], selected: "" },
+          { q: 4, prompt: "Compile/run result of the malformed pointer question from the paper.", code: "void foo(int* x) {\n  const int* p = &x; // line A\n  x = 17;            // line B\n  cout << *p << ' '; // line C\n  x = 28;            // line D\n}\nint main() {\n  int y = 42;\n  foo(y);\n  cout << y << endl;\n}", options: ["compile error line A", "compile error line B", "compile error line C", "compile error line D", "runtime error/UB at line D", "prints `17 17`", "prints `17 42`", "prints `42 17`", "prints `42 42`", "prints `17 28`", "prints `42 28`", "All of the above", "None of the above"], selected: "" },
+          { q: 5, prompt: "Result of constructing `CandyStruct candy1; CandyClass candy2;`", code: "struct CandyStruct {\nprotected:\n  CandyStruct() { cout << \"sweet\\n\"; }\n};\nclass CandyClass {\npublic:\n  CandyClass() { cout << \"sweet\\n\"; }\n};\nint main() {\n  CandyStruct candy1;\n  CandyClass candy2;\n}", options: ["prints `sweet` twice", "runs with no output", "compilation error on line A", "compilation error on line B", "compilation error on both A and B", "other compilation error", "runtime error", "None of the above"], selected: "" },
+          { q: 7, prompt: "Result of returning the address of a local variable and then dereferencing it.", code: "int* foo() {\n  int x = 10;\n  return &x;\n}\nint square(int x) {\n  return x * x;\n}\nint main() {\n  int* y = foo();\n  int z = square(*y);\n  cout << *y << endl;\n}", options: ["10", "an address", "undefined", "compilation error", "compiles but crashes", "none of the above"], selected: "" }
+        ],
+        coding: [
+          { q: 6, prompt: "Use a ranged-for on `vector<double> doubleVec` to increment each item.", sample: "for (double& val : doubleVec) {\n  ++val;\n}", answer: "" },
+          { q: 8, prompt: "Implement a deep-copy assignment operator for `Image` holding `WeatherReading* p` and `string name`.", sample: "class Image {\npublic:\n  Image(string s) : name(s), p(new WeatherReading(s)) {}\n  ~Image() { delete p; }\nprivate:\n  WeatherReading* p;\n  string name;\n};", answer: "" },
+          { q: 9, prompt: "Allocate a dynamic array of 66 `Memo*`, fill it with heap Memos 1..66, add index to `id`, then free all memory.", sample: "struct Memo { int id; };", answer: "" },
+          { q: 10, prompt: "Write a `Complex` class with ctor defaults, private real/imag doubles, and overloads `+`, pre/post `++`, and `<<`.", sample: "", answer: "" },
+          { q: 11, prompt: "Write a `Vector` class storing ints in a C-style array, with push_back, `[]`, and `<<`.", sample: "", answer: "" }
+        ]
+      },
+      {
+        file: "S2019exam2.pdf",
+        title: "CS2124 Exam Two, Spring 2019",
+        mcq: [
+          { q: 1, prompt: "Who created C?", options: ["Gosling", "Hopper", "Ritchie", "Stroustrup", "Thompson", "van Rosum", "Wall", "None"], selected: "Ritchie" },
+          { q: 2, prompt: "Result of pass-by-value pointer/reference mutation question.", code: "void foo(int x) {\n  int* const p = &x;\n  x = 17;\n  cout << *p << ' ';\n  *p = 28;\n}\nint main() {\n  int y = 42;\n  foo(y);\n  cout << y << endl;\n}", options: ["compile error line A", "compile error line B", "compile error line C", "compile error line D", "runtime error/UB at D", "prints `17 17`", "prints `17 28`", "prints `17 42`", "prints `42 17`", "prints `42 28`", "prints `42 42`", "all", "none"], selected: "Student circled `17 42`" },
+          { q: 3, prompt: "Output of the `Parent/Child/GrandChild` pure-virtual override question.", options: ["compile error at A", "compile error at C because abstract", "compile error at D or E", "other compile error", "crash", "`Child Child`", "`Child GrandChild`", "`GrandChild Child`", "`GrandChild GrandChild`", "none"], selected: "`GrandChild GrandChild`" },
+          { q: 4, prompt: "Implicit conversion/assignment from `string s = \"def\"; thingOne = s; thingOne.display();`", options: ["`abc:0`", "`def:0`", "`abc:17`", "`def:17`", "fails to compile", "compiles and no output", "crashes", "none"], selected: "`def:0`" },
+          { q: 5, prompt: "Protected-access question with `Base b; b.protectedMethod();` and `Derived d; d.protectedMethod();`", options: ["A compiles / B compiles", "A compiles / B does not", "A does not / B compiles", "A does not / B does not"], selected: "Both do not compile" },
+          { q: 6, prompt: "Output of calling `petP->eat()` through a `Pet*` that actually points at a `Cat`.", options: ["`Pet::eat`", "`Cat::eat`", "fails because `Cat::eat` is not virtual", "fails for another reason", "crashes", "no output", "none"], selected: "`Cat::eat`" },
+          { q: 7, prompt: "Overloaded virtual dispatch question with `method(Base&)` and `method(Derived&)`.", options: ["`Base::method(Base)`", "`Base::method(Derived)`", "`Derived::method(Base)`", "`Derived::method(Derived)`", "fails to compile", "runtime error", "none"], selected: "`Derived::method(Base)`" },
+          { q: 8, prompt: "Non-virtual base `display` vs virtual derived `display` through `Base*`.", options: ["outputs `Base: 42`", "outputs `Derived: 42`", "fails because `n` is protected", "fails because `virtual` is only in derived", "runtime error", "none"], selected: "Student mark in scan is ambiguous" },
+          { q: 9, prompt: "`FlyingMachine flier; flier = hanger; flier.crash();` question.", options: ["prints hangglider fly", "prints flyingmachine fly", "prints hangglider crashing", "runtime error", "assignment compile error", "`fly` not virtual compile error", "none"], selected: "none" },
+          { q: 10, prompt: "`Constitution* NCC_1701 = new Constitution(); NCC_1701->attack(\"phasers\");` with mismatched derived overload.", options: ["`Beam me up`", "base attack with phasers", "derived photon torpedos", "runtime error", "no constructor", "other compile error", "none"], selected: "other compile error" },
+          { q: 11, prompt: "Constructor/destructor output order question.", options: ["acebdf", "acefdb", "aecbfd", "aecdfb", "caedbf", "caefbd", "ceadfb", "ceabfd", "eacfbd", "eacdbf", "ecafdb", "ecabdf", "fails", "runtime error", "none"], selected: "acefdb" }
+        ],
+        coding: [
+          { q: 12, prompt: "Define class `Skyrim` derived from `Elder`, with deep copy control and equality over corresponding dragons.", sample: "No handwritten blue-book answer is visible in this PDF.", answer: "" }
+        ]
+      },
+      {
+        file: "S2020Exam1.pdf",
+        title: "CS2124 Exam One, Spring 2020",
+        mcq: [
+          { q: 1, prompt: "Who created C++?", options: ["Callahan", "Gosling", "Hopper", "Ritchie", "Sterling", "Stroustrup", "Thompson", "van Rossum", "Wall", "None"], selected: "" },
+          { q: 2, prompt: "`Thing thingTwo = thingOne;` equivalent function call?", options: ["`Thing& operator=(const Thing& rhs)`", "`operator=(thingTwo, thingOne)`", "`thingOne.operator=(thingTwo)`", "Either (b) or (c)", "None"], selected: "" },
+          { q: 3, prompt: "Compile/run result of pass-by-reference `foo` that mutates `x` through pointer `p`.", code: "void foo(int& x) {\n  int* const p = &x;\n  x = 17;\n  cout << *p << ' ';\n  *p = 28;\n}\nint main() {\n  int y = 42;\n  foo(y);\n  cout << y << endl;\n}", options: ["compile error line A", "compile error line B", "compile error line C", "compile error line D", "runtime error/UB at line D", "prints `17 17`", "prints `17 42`", "prints `42 17`", "prints `42 42`", "prints `17 28`", "prints `42 28`", "all", "none"], selected: "" },
+          { q: 4, prompt: "What happens when `ThingHolder` contains `Thing something;` and `th.display();` is called?", code: "class Thing {\npublic:\n  Thing(int val = 17) : n(val) {}\n  void display() { cout << \"Thing: \" << n << endl; }\nprivate:\n  int n;\n};\nclass ThingHolder {\npublic:\n  void display() { cout << \"ThingHolder\\n\"; }\nprivate:\n  Thing something;\n};\nint main() {\n  ThingHolder th;\n  th.display();\n}", options: ["`Thing: 17`", "`ThingHolder`", "`Thing: 17` then `ThingHolder`", "`ThingHolder` then `Thing: 17`", "undefined output", "compile error because `display` is not const", "other compile error", "runtime error", "none"], selected: "" },
+          { q: 5, prompt: "Returning the address of a local `x` and then dereferencing it.", code: "int* foo() {\n  int x = 17;\n  return &x;\n}\nint main() {\n  int* y = foo();\n  cout << *y << endl;\n}", options: ["17 is displayed", "an address is displayed", "compilation error", "compiles but crashes", "undefined behavior", "none of the above"], selected: "" }
+        ],
+        coding: [
+          { q: 6, prompt: "Write a ranged-for loop to double every item in `vector<int> things`.", sample: "for (int& item : things) {\n  item *= 2;\n}", answer: "" },
+          { q: 7, prompt: "Pointer-arithmetic output question on page 7.", sample: "int main() {\n  int x = 6;\n  int* arr = new int[8];\n  for (int i = 0; i < 8; ++i) arr[i] = i * i;\n  int* p = arr + 1;\n  int* q = p + x;\n  cout << \"A: \" << *q << endl;\n  *p = x;\n  ++p;\n  cout << \"B: \" << *p << endl;\n}", answer: "" },
+          { q: 8, prompt: "Implement deep-copy assignment operator for `Falcon` holding `Dragon* p` and `string name`.", sample: "class Falcon {\npublic:\n  Falcon(string s) : name(s), p(new Dragon(s)) {}\n  ~Falcon() { delete p; }\nprivate:\n  Dragon* p;\n  string name;\n};", answer: "" },
+          { q: 9, prompt: "Allocate/fill/mutate/free a dynamic array of 100 `Thing*`.", sample: "struct Thing { int val; };", answer: "" },
+          { q: 10, prompt: "Implement `fill(ifstream&, vector<Thing>&)` and `int totalStuff(const vector<Thing>&)` for `Thing { vector<int> stuff; }`.", sample: "Example lines: `3 2 6 4` and `2 18 12`.", answer: "" },
+          { q: 11, prompt: "Define class `Bit` with one boss, many hires, `hire`, `quit`, and output formatting shown in the sample output.", sample: "Names are not unique. Cycles are allowed.", answer: "" }
+        ]
+      },
+      {
+        file: "S2020exam2.pdf",
+        title: "CS2124 Exam Two, Spring 2020",
+        mcq: [
+          { q: 1, prompt: "Who created C?", options: ["Gosling", "Hopper", "Ritchie", "Stroustrup", "Thompson", "van Rosum", "Wall", "None"], selected: "" },
+          { q: 2, prompt: "Compile/run result of `void Thing(const int& x) { int* const p = &x; int y = x; cout << *p; y = 28; }` style question.", options: ["compile error A", "compile error B", "compile error C", "compile error D", "runtime error D", "prints `17 17`", "prints `17 28`", "prints `17 42`", "prints `42 17`", "prints `42 28`", "prints `42 42`", "all", "none"], selected: "" },
+          { q: 3, prompt: "Pure virtual `Parent::Thing()` / `Child::Thing()` / `GrandChild::Thing()` output question.", options: ["error at A", "error at B", "error at C", "error at D or E", "error at F", "crashes", "`Child Child`", "`Child GrandChild`", "`GrandChild Child`", "`GrandChild GrandChild`", "none"], selected: "" },
+          { q: 4, prompt: "Implicit conversion assignment with `Thing(string, int)` and `thingOne = s`.", options: ["`abc:0`", "`def:0`", "`abc:17`", "`def:17`", "fails to compile", "compiles no output", "crashes", "none"], selected: "" },
+          { q: 5, prompt: "Protected-access question through `Derived::derMeth()` and `d.protectedMethod()`.", options: ["A compiles / B compiles", "A compiles / B not", "A not / B compiles", "A not / B not", "all", "none"], selected: "" },
+          { q: 6, prompt: "`Pet* petP = new Cat(); Cat* catP = petP; catP->eat();` question.", options: ["prints `Pet::eat`", "prints `Cat::eat`", "fails because `Cat::eat` is not virtual", "fails for another reason", "crashes", "no output", "none"], selected: "" },
+          { q: 7, prompt: "Overloaded virtual `method(Base&)` / `method(Derived&)` question with `someFunc`.", options: ["`Base::method(Base)`", "`Base::method(Derived)`", "`Derived::method(Base)`", "`Derived::method(Derived)`", "fails", "runtime error", "none"], selected: "" },
+          { q: 8, prompt: "Which expression is equivalent to `data[5]` for `int* data = new int[12];`", options: ["`data[5]`", "`&(data*5)`", "`&data+5`", "`*data+5`", "`*(data+5)`", "`(data+5)*`", "`&(data+5)`", "`(data+5)&`", "`data+5`", "`data+5&`", "`data&+5`", "`data*5`"], selected: "" },
+          { q: 9, prompt: "`FlyingMachine flier; HangGlider hanger; flier = hanger; flier.crash();`", options: ["prints hangglider fly", "prints flyingmachine fly", "prints hangglider crashing", "runtime error", "assignment compile error", "`fly` not virtual compile error", "none"], selected: "" },
+          { q: 10, prompt: "`Constitution* NCC_1701 = new Constitution(); NCC_1701->attack(\"phasers\");` mismatch question.", options: ["`Beam me up`", "base attack phasers", "derived photon torpedos", "runtime error", "no Constitution ctor", "other compile error", "none"], selected: "" },
+          { q: 11, prompt: "Constructor/destructor output-order question.", options: ["acebdf", "acefdb", "aecbfd", "aecdfb", "caedbf", "caefbd", "ceadfb", "ceabfd", "eacfbd", "eacdbf", "ecafdb", "ecabdf", "fails", "runtime error", "none"], selected: "" }
+        ],
+        coding: [
+          { q: 12, prompt: "Define class `BroodWar` derived from `Starcraft`, with deep copy control, output operator, equality operator, and boolean conversion.", sample: "The scan summary includes the prompt only; no blue-book answer is embedded.", answer: "" }
+        ]
+      },
+      {
+        file: "Spring2020Final.pdf",
+        title: "CS2124 Final Exam Late Edition, Spring 2020",
+        mcq: [
+          { q: 1, prompt: "Who created Python?", options: ["Gallagher", "Gosling", "Katz", "Liskov", "Ritchie", "Stroustrup", "van Rossum", "Wirth", "Wall", "None"], selected: "" },
+          { q: 2, prompt: "Which local definition of `p` lets `void func(const Thing& something) { /* p */ *p = 17; }` compile?", code: "void func(const Thing& something) {\n  /* define p */\n  *p = 17;\n}", options: ["`Thing* p = something;`", "`Thing* p = &something;`", "`Thing* p = *something;`", "`const Thing* p = something;`", "`const Thing* p = &something;`", "`const Thing* p = *something;`", "`Thing* const p = something;`", "`Thing* const p = &something;`", "`Thing* const p = *something;`", "(a) or (d)", "(b) or (e)", "(c) or (f)", "(a) or (g)", "(b) or (h)", "(c) or (i)", "None of the above"], selected: "" },
+          { q: 3, prompt: "Base/Derived overload program with `base.foo(der); der.foo(der);`", code: "class Base { virtual void foo(Base b) { cout << \"Base::foo(Base)\\n\"; } };\nclass Derived : public Base { void foo(Derived d) { cout << \"Derived::foo(Derived)\\n\"; } };", options: ["Base/Base", "Derived/Derived", "Base then Derived", "Derived then Base", "compile error at A", "compile error at B", "compile error at C", "other compile error", "compiles no output", "crashes", "none"], selected: "" },
+          { q: 4, prompt: "Class `A` contains `B someB;` and `a.foo();`", code: "class B {\npublic:\n  B(int val = 42) : n(val) {}\n  virtual void foo() const { cout << \"B\"; }\nprivate:\n  int n;\n};\nclass A {\npublic:\n  void foo() { cout << \"A\"; }\nprivate:\n  B someB;\n};", options: ["outputs B", "outputs A", "outputs BA", "outputs AB", "override error", "other compile error", "runtime error/UB", "none"], selected: "" },
+          { q: 5, prompt: "What does `find_if(v.begin()+1, v.end(), even)` print for `{6,42,28,17,16,49}`?", code: "int main() {\n  vector<int> v{6,42,28,17,16,49};\n  cout << *find_if(v.begin()+1, v.end(), [](int val) { return val % 2 == 0; }) << endl;\n}", options: ["6", "42", "28", "16", "6,42,28", "6,42,28,16", "fails to compile", "compiles but crashes/UB", "none"], selected: "" },
+          { q: 6, prompt: "Protected `setName` access from `Dog` through `Cat& rhs` and `Dog& rhs`.", code: "class Pet { protected: void setName(string); };\nclass Cat : public Pet {};\nclass Dog : public Pet {\n  void setCatName(Cat& rhs) { rhs.setName(\"Mehitabel\"); }\n  void setDogName(Dog& rhs) { rhs.setName(\"Fido\"); }\n};", options: ["outputs `Mehitabel Fido`", "compile error line A", "compile error line B", "compile errors both A and B", "compile error elsewhere", "none"], selected: "" },
+          { q: 7, prompt: "Overloaded free `func(Base&)`, `func(Derived&)`, and `otherFunc(Base&) { func(arg); }` called with a `Derived`.", options: ["`func(Base) - Base::foo()`", "`func(Base) - Derived::foo()`", "`func(Derived) - Derived::foo()`", "`func(Derived) - Base::foo()`", "fails to compile", "runtime error/UB", "none"], selected: "" },
+          { q: 8, prompt: "Multiple-inheritance `Child : public P2, public P1` then `c.whoamI();`", options: ["`P1`", "`P2`", "`P1P2`", "`P2P1`", "will not compile", "compiles but crashes", "none"], selected: "" }
+        ],
+        coding: [
+          { q: 9, prompt: "Write a generic function template like `count_if` over a half-open range.", sample: "Sample: `int arr[] = {2,5,2,4,5,7,2}; count(arr, arr+8, isEven)` returns 4.", answer: "" },
+          { q: 10, prompt: "Using iterators only, compute and display the sum of all elements in `vector<double> myList`.", sample: "No `auto`. No ranged-for.", answer: "" },
+          { q: 11, prompt: "Using recursion only, implement either `baseThree(unsigned)` or `treeMin(TernNode*)`.", sample: "`struct TernNode { int data; TernNode *left, *mid, *right; };`", answer: "" },
+          { q: 12, prompt: "Add a nested `Iterator` class to a singly linked list `SLL` so ranged-for can mutate elements.", sample: "`for (int& val : v) { val *= 2; }`", answer: "" },
+          { q: 13, prompt: "Write `bool removeLastValue(Node*& list, int target)` removing only the last matching node.", sample: "Do not create any new nodes.", answer: "" },
+          { q: 14, prompt: "Define `Company`, abstract `Performer`, `Actor`, and `Mime`, with `showtime()` calling `perform()` in hire order.", sample: "Sample output includes spoken actor lines and `(silence)` for mimes.", answer: "" }
+        ]
+      },
+      {
+        file: "F2021exam1.pdf",
+        title: "CS-UY 2124 Mid-Term Exam #1, October 26 2021",
+        mcq: [
+          { q: 1, prompt: "Who created C++?", options: ["Bill Gates", "Sergey Brin", "Guido van Rossum", "Ada Lovelace", "Alan Turing", "James Gosling", "Bjarne Stroustrup", "Dennis Ritchie", "Claude Shannon", "None"], selected: "Bjarne Stroustrup" },
+          { q: 2, prompt: "Output of `Cylinder cyl; cout << cyl.calc_volume();` where members are uninitialized doubles.", options: ["1", "0", "undefined", "3.14", "none of the above"], selected: "undefined" },
+          { q: 3, prompt: "Which expression invokes `calc_volume()` on a `Cylinder* c_ptr`?", options: ["`c_ptr.calc_volume()`", "`(*c_ptr.calc_volume())`", "`*(c_ptr.calc_volume())`", "`c_ptr->calc_volume()`", "`c_ptr>-calc_volume()`", "`c_ptr<-calc_volume()`", "Any of the above", "None of the above"], selected: "`c_ptr->calc_volume()`" },
+          { q: 4, prompt: "`Point pt3 = pt1;` produces which function call?", options: ["`pt1.assignment=(pt3)`", "`pt1.operator=(pt3)`", "`pt3.assignment=(pt1)`", "`pt3.operator=(pt1)`", "the Point copy constructor", "`Point(pt1.x, pt1.y)`", "`Point(pt3.x, pt3.y)`", "None of the above"], selected: "the Point copy constructor" },
+          { q: 7, prompt: "Compile result of `double* const dbl_ptr = &num; dbl_ptr = new double(num + 1);`", code: "double* do_things(const double& num) {\n  double* const dbl_ptr = &num;\n  cout << *dbl_ptr << ' ';\n  dbl_ptr = new double(num + 1);\n  return dbl_ptr;\n}", options: ["compilation error at line 1", "compilation error at line 2", "compilation error at line 3", "compilation error at line 4", "compilation error at line 5", "program outputs `3.4` followed by a compilation error", "program outputs `3.4 4.4`", "program outputs `4.4 3.4`", "program outputs `3.4`", "none of the above"], selected: "compilation error at line 3" },
+          { q: 8, prompt: "Returning `&vec` from `vector<int>* add_elems(vector<int> vec)` and then using the returned pointer.", code: "vector<int>* add_elems(vector<int> vec) {\n  vec.push_back(2);\n  vec.push_back(1);\n  vec.push_back(2);\n  vec.push_back(4);\n  return &vec;\n}", options: ["Compilation error", "Program crashes but compiles successfully", "Memory addresses are output", "Undefined behavior", "Program will output `2 1 2 4`", "Program will output `2`", "Program will output `1`", "Program will output `4`", "None of the above"], selected: "Student circled `2 1 2 4`" }
+        ],
+        coding: [
+          { q: 5, prompt: "Implement deep-copy assignment operator for `CellPhone` with `Battery* bt` and `double size`.", sample: "class CellPhone {\npublic:\n  CellPhone(double size = 0) : size(size) { bt = new Battery; }\n  ~CellPhone() { delete bt; }\nprivate:\n  double size;\n  Battery* bt;\n};", answer: "Student answer deep-copies `bt` and returns `*this`; the scan does not clearly show whether `size = rhs.size` was included." },
+          { q: 6, prompt: "Write a ranged-for that outputs each `Pirate` in `vector<Pirate> pirates` on a separate line.", sample: "for (const Pirate& aPirate : pirates) {\n  cout << aPirate << endl;\n}", answer: "Matches the handwritten answer." },
+          { q: 9, prompt: "Implement `fillData(ifstream&, vector<Pizza>&)` and `filter(const vector<Pizza>&, double)` for pizza inventory.", sample: "`struct Pizza { int size; string topping; double price; };`", answer: "Student solution reads size/topping/price and prints pizzas with `price == thePrice || price > thePrice`." },
+          { q: 10, prompt: "Pixel struct parts A-C: read RGB triples into `vector<Pixel*>`, print grayscale average, and free all pointers.", sample: "`struct Pixel { int red; int blue; int green; };`", answer: "Student answer allocates `new Pixel{red, blue, green}`, computes average, then deletes and nulls each pointer." },
+          { q: 12, prompt: "Define class `Tool` with `name`, `volts`, and `vector<Tool*>` of compatible tools; implement ctor, output operator, and `works_with`.", sample: "Tools cannot support themselves and cannot list duplicates.", answer: "Student answer stores `vector<Tool*>`, rejects self/duplicates, and prints supported tool names in `operator<<`." }
+        ]
+      },
+      {
+        file: "Fall2021Final.pdf",
+        title: "CS 2124 Final Exam, Fall 2021",
+        mcq: [
+          { q: 2, prompt: "Who is the creator of Java?", options: ["Bill Gates", "Guido van Rossum", "Alan Turing", "Bjarne Stroustrup", "Claude Shannon", "Sergey Brin", "Ada Lovelace", "James Gosling", "Dennis Ritchie", "None"], selected: "James Gosling" },
+          { q: 3, prompt: "Result of `SmartTelevision: public Television, public Computer` then `x287.connect();`", code: "class Television { virtual void connect() { cout << \"scanning channels...\"; } };\nclass Computer { virtual void connect() { cout << \"joining network...\"; } };\nclass SmartTelevision : public Television, public Computer {};\nint main() { SmartTelevision x287; x287.connect(); }", options: ["outputs scanning channels", "outputs joining network", "outputs both in one order", "fails to compile", "crashes", "none"], selected: "fails to compile" },
+          { q: 5, prompt: "Custom `operator@=` in `Integer.h` question.", options: ["compilation error at line 1", "compilation error at line 2", "compilation error at line 3", "compilation error at line 4", "compilation error at line 5", "compilation error at line 6", "compilation error at line 7", "No compilation errors from Integer.h", "None of the above"], selected: "compilation error at line 2" },
+          { q: 6, prompt: "Output of `increment(int* num, int n_times) { for (...) num = num + 1; }` on `val = 2`.", code: "void increment(int* num, int n_times) {\n  for (int i = 0; i < n_times; i++) num = num + 1;\n}\nint main() {\n  int val = 2;\n  increment(&val, 3);\n  cout << val;\n}", options: ["4", "5", "6", "2", "8", "fails to compile", "crashes", "none"], selected: "2" },
+          { q: 7, prompt: "Slicing area question with `Rectangle rect(4); display_area(rect);` where `display_area(Square sq)`.", code: "class Square {\npublic:\n  Square(int side_length = 1) : length(side_length) {}\n  virtual double calc_area() const { return length * length; }\nprotected:\n  double get_length() const { return length; }\nprivate:\n  double length;\n};\nclass Rectangle : public Square {\npublic:\n  Rectangle(double width = 1) : width(width) {}\n  double calc_area() const { return get_length() * width; }\nprivate:\n  double width;\n};\nvoid display_area(Square sq) { cout << sq.calc_area(); }\nint main() { Rectangle rect(4); display_area(rect); }", options: ["Undefined", "0", "1", "4", "5", "fails to compile", "crashes", "none"], selected: "1" },
+          { q: 9, prompt: "`GreetingCard card(3.99, \"Happy Birthday!\"); card = 5.99; card.display();`", code: "class GreetingCard {\npublic:\n  GreetingCard(double price, string msg = \":-)\") : price(price), msg(msg) {}\n  void display() { cout << '$' << price << \" - \" << msg; }\nprivate:\n  double price;\n  string msg;\n};", options: ["Compilation error at Line 1", "Compilation error at Line 2", "Compilation error at Line 3", "Compilation error at Line 4", "Compilation error at Line 5", "outputs `$5.99 - :-)`", "outputs `$5.99 - Happy Birthday`", "outputs `$3.99 - Happy Birthday`", "outputs `$3.99 - :-)`", "crashes", "fails to compile", "none"], selected: "`$5.99 - :-)`" },
+          { q: 10, prompt: "Pure-virtual `Pet::communicate() const` vs `Dog::communicate()` lacking `const`.", code: "class Pet {\npublic:\n  virtual void communicate() const = 0;\n};\nclass Cat : public Pet {\npublic:\n  void communicate() const { cout << \"meow\" << endl; }\n};\nclass Dog : public Pet {\npublic:\n  void communicate() { cout << \"woof\" << endl; }\n};\nvoid pet(const Pet& p) { p.communicate(); }\nint main() { Dog fido; pet(fido); }", options: ["Compilation error at Line 1", "Compilation error at Line 2", "Compilation error at Line 3", "Compilation error at Line 4", "Compilation error at Line 5", "Compilation error at Line 6", "outputs woof", "outputs meow", "fails to compile", "crashes", "no output", "none"], selected: "compilation error at line 5" },
+          { q: 11, prompt: "Output of `meet(an, ch)` with `Ancestor an; Child ch;` and virtual `reveal()`.", options: ["Parent <-> Parent", "Parent <-> Child", "Ancestor <-> Child", "Ancestor <-> Parent", "Ancestor <-> Ancestor", "Child <-> Child", "fails to compile", "crashes", "none"], selected: "Ancestor <-> Child" }
+        ],
+        coding: [
+          { q: 4, prompt: "Using iterators only, find the longest string in `list<string> all_strings` and output it.", sample: "string longest_str = \"\";\nfor (list<string>::iterator iter = all_strings.begin(); iter != all_strings.end(); ++iter) {\n  if ((*iter).size() > longest_str.size()) longest_str = *iter;\n}\ncout << \"Longest word: \" << longest_str << endl;", answer: "Typed answer is visible in the scan." },
+          { q: 8, prompt: "Define `LessThan` and a generic `replace_if` over a half-open range.", sample: "LessThan pred_func(3);\nvector<int> my_ints { 1, 7, 0, 2, 8, 5, 3, 6, 2, 4 };\nreplace_if(my_ints, my_ints + 10, pred_func, -1);", answer: "Typed solution is visible; `replace_if` loop is correct, while `LessThan` OCR suggests a variable-name typo." },
+          { q: 12, prompt: "Write `vector<Node*> split_list(Node* head, int target)`.", sample: "Target nodes are removed and freed; the function returns heads of split-off lists.", answer: "Visible typed answer appears incomplete because it does not relink the list around removed nodes." },
+          { q: 13, prompt: "Define an iterator class sufficient for ranged-for over a custom `Vector` of ints.", sample: "`for (int& val : vec) { val += 1831; }`", answer: "Visible typed answer defines ctor, `operator==`, `operator!=`, pre/post `++`, and `operator*`." },
+          { q: 14, prompt: "Define `University`, abstract `Member`, `Faculty`, and `Student` with `add_member` and `security_check()`.", sample: "Faculty always have high security; students print their numeric level.", answer: "Visible typed answer implements the full class set with a `University* community` pointer in `Member`." }
+        ]
+      },
+      {
+        file: "S2023Exam1.pdf",
+        title: "CS-UY 2124 Mid-Term Exam #1, March 7 2023",
+        mcq: [
+          { q: 1, prompt: "Who created C?", options: ["Sergey Brin", "Guido van Rossum", "Ada Lovelace", "Alan Turing", "James Gosling", "Bjarne Stroustrup", "Dennis Ritchie", "Claude Shannon", "None of the above"], selected: "Student circled Bjarne Stroustrup" },
+          { q: 2, prompt: "For `Thing thingTwo = thingOne;`, which function call is equivalent?", options: ["`Thing& Thing::operator=(const Thing& rhs)`", "`operator=(thingTwo, thingOne)`", "`thingOne.operator=(thingTwo)`", "Either (b) or (c)", "None of the above because it uses the Thing copy constructor", "None of the above"], selected: "Student circled `operator=(thingTwo, thingOne)`" },
+          { q: 3, prompt: "Expression `*p.x` means the same thing as:", options: ["`p->x`", "`*(p.x)`", "all of the above", "none of the above"], selected: "Student circled `p->x`" },
+          { q: 4, prompt: "Which expression is equivalent to `&data[5]`?", options: ["16", "25", "36", "`*data + 5`", "`*(data + 5)`", "`&data + 5`", "`&(data + 5)`", "`data + 5`", "None of the above"], selected: "`data + 5`" },
+          { q: 6, prompt: "`void foo(const int x) { int* const p = &x; x = 17; cout << *p << ' '; *p = 28; }`", code: "void foo(const int x) {\n  int* const p = &x;\n  x = 17;\n  cout << *p << ' ';\n  *p = 28;\n}\nint main() {\n  int y = 42;\n  foo(y);\n  cout << y << endl;\n}", options: ["compile error at line A", "compile error at line B", "compile error at line C", "compile error at line D", "runtime error/UB at line D", "prints `17 17`", "prints `17 42`", "prints `42 17`", "prints `42 42`", "prints `17 28`", "prints `42 28`", "None of the above"], selected: "compile error at line B" },
+          { q: 7, prompt: "`Falcon` contains a `Dragon fly;` but does not initialize it even though `Dragon` only has `Dragon(string)`.", code: "class Dragon {\npublic:\n  Dragon(string val) : payload(val) {}\n  void display() { cout << \"Dragon payload: \" << payload << endl; }\nprivate:\n  string payload;\n};\nclass Falcon {\npublic:\n  void display() { cout << \"Falcon class ship\\n\"; fly.display(); }\nprivate:\n  Dragon fly;\n};\nint main() { Falcon heavy; heavy.display(); }", options: ["outputs Dragon payload only", "outputs Falcon class ship only", "outputs both in one order", "compile time error", "run time error", "none"], selected: "compile time error" }
+        ],
+        coding: [
+          { q: 5, prompt: "Use ranged-for to print each string in `vector<string> strVec`, one per line.", sample: "for (const string& s : strVec) {\n  cout << s << endl;\n}", answer: "Visible handwritten answer matches this." },
+          { q: 8, prompt: "a-d dynamic array of 100 `int*`: allocate, fill with 1..100, add index to pointed-to ints, and free all memory.", sample: "Question prompt spans parts a-d.", answer: "Visible handwritten answer attempts all four parts; the summary notes the array allocation and cleanup forms are imperfect." },
+          { q: 9, prompt: "Implement deep-copy assignment operator for `Orville` holding `ShuttleCraft* p` and `string commander`.", sample: "`ShuttleCraft` supports copy control.", answer: "Student answer copies `commander`, deletes old `p`, allocates `new ShuttleCraft(*rhs.p)`, but the return and self-assignment handling are incomplete." },
+          { q: 10, prompt: "Implement `parse_data(ifstream&, vector<Entry>&)` and `count_entries(...)` for subway-entry records.", sample: "Each row is `borough\ttime\tcontact`; `Entry` has `string boro; int time; bool con;`.", answer: "Visible handwritten answer reads rows, maps `c` to `true`, and counts matching borough/contact values." },
+          { q: 11, prompt: "Define class `Player` with number, handedness, paired players, output operator, `is_paired_with`, and `pairs_with`.", sample: "Sample players `p1..p7` and sample output are provided on the exam pages.", answer: "Visible handwritten answer stores `vector<Player*> pairs`, rejects self/same-hand/duplicate pairings, and adds reciprocal links." }
+        ]
+      },
+      {
+        file: "S2023exam2.pdf",
+        title: "CS-UY 2124 Mid-Term Exam #2, April 18 2023",
+        mcq: [
+          { q: 1, prompt: "Who is the creator of Python?", options: ["Larry Wall", "Guido van Rossum", "Ada Lovelace", "John McCarthy", "James Gosling", "Bjarne Stroustrup", "Dennis Ritchie", "Niklaus Wirth", "Gary Kildall", "None of the above"], selected: "Scan summary says the visible selected answer is correct, but the exact circled option is not OCRed" },
+          { q: 2, prompt: "Array/pointer arithmetic output for `SIZE=10`, `arr[i]=2*i`, `p=arr+SIZE-2`, `q=p-4`.", code: "const int SIZE = 10;\nint main() {\n  int* arr = new int[SIZE];\n  for (int i = 0; i < SIZE; i++) arr[i] = 2 * i;\n  int* p = arr + SIZE - 2;\n  int* q = p - 4;\n  cout << \"A: \" << p[1] << \", B: \" << *q << endl;\n}", options: ["A: 16, B: 8", "A: 16, B: 12", "A: 18, B: 8", "A: 8, B: 6", "A: 9, B: 4", "The program compiles but has a run-time error", "Compilation error", "None of the above"], selected: "A: 18, B: 8" },
+          { q: 3, prompt: "`SoftDrink/Soda/GingerAle` override question with lines A-G.", code: "class SoftDrink {\npublic:\n  virtual void display() const = 0;\n};\nclass Soda : public SoftDrink {\npublic:\n  void display() const override { cout << \"Soda \"; }\n};\nclass GingerAle : public Soda {\npublic:\n  void display() { cout << \"GingerAle \"; }\n};\nint main() {\n  GingerAle ga;\n  Soda* sd = &ga;\n  sd->display();\n  ga.display();\n}", options: ["outputs `GingerAle GingerAle`", "outputs `Soda GingerAle`", "outputs `Soda Soda`", "outputs `GingerAle Soda`", "compiles and outputs nothing", "compiles but crashes when run", "Compilation error at Line A", "Compilation error at Line B", "Compilation error at Line C", "Compilation error at Line D", "Compilation error at Line E", "Compilation error at Line F", "Compilation error at Line G", "None of the above"], selected: "" },
+          { q: 4, prompt: "Virtual dispatch through `Parent* ptr = new Child; check(*ptr, stat_str);`", code: "class Parent {\npublic:\n  virtual void test(const string& status) const {\n    cout << \"Parent's status: \" << status;\n  }\n};\nclass Child : public Parent {\npublic:\n  void test(const string& status) const override {\n    cout << \"Child's status: \" << status;\n  }\n};", options: ["`Parent's status: okay..`", "`Child's status: okay..`", "`Parent's status:`", "`Child's status:`", "compiles but has a run-time error", "Compilation error because there is no Child constructor", "Any other compilation error", "None of the above"], selected: "`Child's status: okay..`" },
+          { q: 5, prompt: "Construction/destruction-order question with `Parent`, `Child`, and `GrandChild` printing `A..F`.", options: ["ACEFDB", "ACEDB", "ECAB", "The program fails to compile", "The program compiles and outputs nothing", "ECABDF", "ACEB", "ECADF", "None of the above"], selected: "Gradescope summary reports choice #7" },
+          { q: 6, prompt: "Equivalent function call for postfix `c++` where both prefix and postfix overloads exist.", options: ["`operator++(c)`", "`c.operator++()`", "`c.operator++(0)`", "`operator++(c,0)`", "all of the above", "none of the above"], selected: "" },
+          { q: 7, prompt: "Which `ptr` declaration compiles in `void func(const string* const str_ptr) { ptr = str_ptr; }`", options: ["`const string* ptr;`", "`string const ptr;`", "`string* const ptr;`", "`const string& ptr;`", "`string ptr*;`", "option 1 and option 2", "option 3 and option 4", "options 1-5", "None of the above"], selected: "" },
+          { q: 8, prompt: "`SwingBridge* ptr = new Bridge(); ptr->swing();`", code: "class Bridge {\npublic:\n  virtual void close() { cout << \"closing...\"; }\n};\nclass SwingBridge : public Bridge {\npublic:\n  void swing() { cout << \"opening...\"; }\n};\nint main() {\n  SwingBridge* ptr = new Bridge();\n  ptr->swing();\n}", options: ["prints `opening...`", "prints `closing...`", "crashes when run", "runs without printing anything", "Compilation error at Line 1", "Compilation error at Line 2", "Compilation error at Line 3", "Compilation error at Line 4", "None of the above"], selected: "compilation error at line 3" },
+          { q: 9, prompt: "`Dinosaur/TRex/Raptor` battle question.", code: "class Dinosaur {\npublic:\n  virtual void attack(Dinosaur& dino) { cout << \"Dino attacking! \"; }\n};\nclass TRex : public Dinosaur {\npublic:\n  void attack(Dinosaur& dino) { cout << \"TRex attacking! \"; }\n};\nclass Raptor : public Dinosaur {};\nvoid battle(Dinosaur& d1, Dinosaur& d2) {\n  d1.attack(d2);\n  d2.attack(d1);\n}", options: ["`Dino attacking! TRex attacking!`", "`TRex attacking! Raptor attacking!`", "`TRex attacking! Dino attacking!`", "The program compiles and crashes when run", "Compilation error at Line A", "Compilation error at Line B", "Compilation error at Line C", "Compilation error at Line D", "Compilation error at Line E", "Compilation error at Line F", "Compilation error at Line G", "Compilation error at Line H", "None of the above"], selected: "" },
+          { q: 10, prompt: "Construction order for `Room`, `Suite`, and `Hotel` with member-init list `Hotel(): suite(700), room(350){}`.", options: ["`Suite size: 750 Room size: 350`", "`Suite size: 400 Room size: 200`", "`Room size: 350 Suite size: 700`", "`Room size: 200 Suite size: 400`", "The program compiles but has a run-time error", "Any other compilation error", "None of the above"], selected: "" },
+          { q: 11, prompt: "Pure-virtual `Pet::eat() = 0;` plus out-of-class definition and `Pet* petP = new Pet();`", code: "class Pet {\npublic:\n  virtual void eat() = 0;\n};\nvoid Pet::eat() { cout << \"Pet::eat\"; }\nclass Cat : public Pet {\npublic:\n  void eat() { cout << \"Cat::eat\"; }\n};\nint main() {\n  Pet* petP = new Pet();\n  Cat* catP = new Cat();\n  petP->eat();\n  catP->eat();\n}", options: ["The program will output `Pet::eat`", "The program will output `Cat::eat`", "The program will compile and not output anything", "The program will compile, but will crash when run", "Compilation error at Line A", "Compilation error at Line B", "Compilation error at Line C", "Compilation error at Line D", "Compilation error at Line E", "Compilation error at Line F", "All of the above", "None of the above"], selected: "compilation error at line C" }
+        ],
+        coding: [
+          { q: 12, prompt: "Implement class `ScatPlot` derived from `Plot`, with owned `Point*`, full copy control, output operator, index operator, `find()`, and boolean conversion.", sample: "The scan pages for the handwritten answer are obscured, but the full prompt is included in the PDF.", answer: "Handwritten solution is not recoverable from the scan." }
+        ]
+      },
+      {
+        file: "ptcExam1.pdf",
+        title: "Polytechnic Tutoring Center Mock Exam 1, Fall 2023",
+        mcq: [
+          { q: 2, prompt: "Result of `int i = 7; const int* ip = &i; i += 1; cout << i;`", options: ["7", "8", "runtime error", "compilation error"], selected: "" },
+          { q: 3, prompt: "Result of `const int i = 7; int* ip = &i; cout << i;`", options: ["prints 7", "error line A", "error line B", "error line C", "crash", "undefined"], selected: "" },
+          { q: 4, prompt: "`foo` returns pointer to local `y`; then `cout << *foo(z);`", options: ["compilation error", "segfault", "runtime error", "program will crash", "undefined"], selected: "" },
+          { q: 5, prompt: "Struct `CovidStatus` has private default ctor; instantiate `CovidStatus covid19;`", options: ["runtime error", "compilation error", "undefined", "none"], selected: "" },
+          { q: 6, prompt: "Meaning of `tp->item` for pointer `tp` to `Thing` with attribute `item`", options: ["`*(tp.item)`", "`(tp.item)*`", "`*tp(.item)`", "`(*tp).item`"], selected: "" }
+        ],
+        coding: [
+          { q: 1, prompt: "Declare: a) unchanging pointer to int, b) pointer to unchanging int, c) unchanging pointer to unchanging int.", sample: "", answer: "" },
+          { q: 7, prompt: "Write a function over `vector<Account>` that returns the index of the account with a specified `acc_id`.", sample: "struct Account { int acc_id; int balance; };", answer: "" },
+          { q: 8, prompt: "Read a file of `ID:` / `Balance:` pairs and fill an array of `Account*` with up to 10 heap objects.", sample: "Input examples are shown in the PDF.", answer: "" },
+          { q: 9, prompt: "Iterate over an array of `Account*` and free all memory, including the array itself.", sample: "", answer: "" },
+          { q: 10, prompt: "Increment all elements of a passed `vector<int>` using ranged-for.", sample: "", answer: "" },
+          { q: 11, prompt: "Define `Employee` with name, optional boss, sub-employees, add/remove team members, and output operator.", sample: "No heap or copy control required.", answer: "" },
+          { q: 12, prompt: "For `Book` storing a dynamically allocated string title, implement ctor, copy ctor, copy assignment operator, and destructor.", sample: "", answer: "" }
+        ]
+      }
+    ];
+
+    const answerKeyMap = {
+      "S2019Exam1.pdf": {
+        1: "Gosling",
+        2: "`(*p).x`",
+        3: "`thingOne.operator=(thingTwo)`",
+        4: "compile error line A",
+        5: "compilation error on line A",
+        7: "undefined"
+      },
+      "S2019exam2.pdf": {
+        1: "Ritchie",
+        2: "prints `17 42`",
+        3: "`GrandChild GrandChild`",
+        4: "`def:0`",
+        5: "A does not / B does not",
+        6: "`Cat::eat`",
+        7: "`Derived::method(Base)`",
+        8: "outputs `Base: 42`",
+        9: "none",
+        10: "other compile error",
+        11: "acefdb"
+      },
+      "S2020Exam1.pdf": {
+        1: "Stroustrup",
+        2: "None",
+        3: "prints `17 28`",
+        4: "`ThingHolder`",
+        5: "undefined behavior"
+      },
+      "S2020exam2.pdf": {
+        1: "Ritchie",
+        2: "compile error A",
+        3: "`GrandChild GrandChild`",
+        4: "`def:0`",
+        5: "A compiles / B not",
+        6: "fails for another reason",
+        7: "`Derived::method(Base)`",
+        8: "`*(data+5)`",
+        9: "none",
+        10: "other compile error",
+        11: "acefdb"
+      },
+      "Spring2020Final.pdf": {
+        1: "van Rossum",
+        2: "None of the above",
+        3: "other compile error",
+        4: "outputs A",
+        5: "42",
+        6: "compile error line A",
+        7: "`func(Base) - Derived::foo()`",
+        8: "will not compile"
+      },
+      "F2021exam1.pdf": {
+        1: "Bjarne Stroustrup",
+        2: "undefined",
+        3: "`c_ptr->calc_volume()`",
+        4: "the Point copy constructor",
+        7: "compilation error at line 1",
+        8: "Undefined behavior"
+      },
+      "Fall2021Final.pdf": {
+        2: "James Gosling",
+        3: "fails to compile",
+        5: "compilation error at line 2",
+        6: "2",
+        7: "1",
+        9: "outputs `$5.99 - :-)`",
+        10: "fails to compile",
+        11: "Ancestor <-> Child"
+      },
+      "S2023Exam1.pdf": {
+        1: "Dennis Ritchie",
+        2: "None of the above because it uses the Thing copy constructor",
+        3: "`*(p.x)`",
+        4: "`data + 5`",
+        6: "compile error at line A",
+        7: "compile time error"
+      },
+      "S2023exam2.pdf": {
+        1: "Guido van Rossum",
+        2: "A: 18, B: 8",
+        3: "outputs `Soda GingerAle`",
+        4: "`Child's status: okay..`",
+        5: "ACEB",
+        6: "`c.operator++(0)`",
+        7: "`const string* ptr;`",
+        8: "Compilation error at Line 3",
+        9: "`TRex attacking! Dino attacking!`",
+        10: "`Room size: 350 Suite size: 700`",
+        11: "Compilation error at Line C"
+      },
+      "ptcExam1.pdf": {
+        2: "8",
+        3: "error line B",
+        4: "undefined",
+        5: "compilation error",
+        6: "`(*tp).item`"
+      }
+    };
+
+    const examFilter = document.getElementById('examFilter');
+    const typeFilter = document.getElementById('typeFilter');
+    const searchBox = document.getElementById('searchBox');
+    const content = document.getElementById('content');
+    const stats = document.getElementById('stats');
+    const layout = document.querySelector('.layout');
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+    const topbarSidebarBtn = document.getElementById('topbarSidebarBtn');
+    const clearAnswersBtn = document.getElementById('clearAnswersBtn');
+    const storageKey = 'cs2124-exam-practice-answers';
+    const savedAnswers = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const defaultRunnerCode = `#include <iostream>\n\nint main() {\n    std::cout << \"Ready\" << std::endl;\n}`;
+    const sidebarStateKey = 'cs2124-exam-practice-sidebar-collapsed';
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[ch]);
+    }
+
+    function optionId(file, q, idx) {
+      return `${file}__q${q}__o${idx}`;
+    }
+
+    function answerKey(file, q) {
+      return `${file}__q${q}`;
+    }
+
+    function checkKey(file, type, q) {
+      return `${file}__${type}__q${q}__checked`;
+    }
+
+    function getAnswerKey(file, q) {
+      return answerKeyMap[file] && answerKeyMap[file][Number(q)] ? answerKeyMap[file][Number(q)] : '';
+    }
+
+    function syncSidebarButtons() {
+      const collapsed = sidebar.classList.contains('collapsed');
+      layout.classList.toggle('sidebar-hidden', collapsed);
+      topbarSidebarBtn.textContent = collapsed ? 'Show Filters' : 'Hide Filters';
+      toggleSidebarBtn.textContent = collapsed ? 'Show' : 'Hide';
+    }
+
+    function saveAnswer(file, q, value) {
+      savedAnswers[answerKey(file, q)] = value;
+      localStorage.setItem(storageKey, JSON.stringify(savedAnswers));
+      renderStats();
+    }
+
+    function saveChecked(file, type, q, checked) {
+      savedAnswers[checkKey(file, type, q)] = checked;
+      localStorage.setItem(storageKey, JSON.stringify(savedAnswers));
+      renderStats();
+    }
+
+    async function runCode(textarea, output, button) {
+      const code = textarea.value;
+      output.textContent = 'Compiling...';
+      button.disabled = true;
+      try {
+        const response = await fetch('https://wandbox.org/api/compile.json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            compiler: 'clang-17.0.1',
+            code,
+            options: 'warning',
+            'compiler-option-raw': '-std=c++17',
+            save: false
+          })
+        });
+        const data = await response.json();
+        const parts = [];
+        if (data.compiler_output) parts.push('Compiler output:\n' + data.compiler_output.trim());
+        if (data.compiler_error) parts.push('Compiler error:\n' + data.compiler_error.trim());
+        if (data.program_output) parts.push('Program output:\n' + data.program_output.trim());
+        if (data.program_error) parts.push('Program error:\n' + data.program_error.trim());
+        if (!parts.length) parts.push('No output.');
+        output.textContent = parts.join('\n\n');
+      } catch (err) {
+        output.textContent = 'Runner failed.\n\n' + err.message;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function renderStats() {
+      const selectedExam = examFilter.value || 'all';
+      const examList = selectedExam === 'all' ? exams : exams.filter(exam => exam.file === selectedExam);
+      const totalMcq = examList.reduce((sum, exam) => sum + exam.mcq.length, 0);
+      const answered = examList.reduce((sum, exam) => {
+        return sum + exam.mcq.filter(item => savedAnswers[answerKey(exam.file, item.q)]).length;
+      }, 0);
+      const totalCoding = examList.reduce((sum, exam) => sum + exam.coding.length, 0);
+      const totalQuestions = examList.reduce((sum, exam) => sum + exam.mcq.length + exam.coding.length, 0);
+      const checked = examList.reduce((sum, exam) => {
+        const mcqChecked = exam.mcq.filter(item => savedAnswers[checkKey(exam.file, 'mcq', item.q)]).length;
+        const codingChecked = exam.coding.filter(item => savedAnswers[checkKey(exam.file, 'coding', item.q)]).length;
+        return sum + mcqChecked + codingChecked;
+      }, 0);
+      stats.innerHTML = [
+        `<div class="stat"><strong>${examList.length}</strong> exam set(s) shown</div>`,
+        `<div class="stat"><strong>${totalMcq}</strong> MCQ(s)</div>`,
+        `<div class="stat"><strong>${answered}</strong> MCQ answer(s) saved</div>`,
+        `<div class="stat"><strong>${totalCoding}</strong> coding prompt(s)</div>`,
+        `<div class="stat"><strong>${checked}</strong> checked off out of ${totalQuestions}</div>`
+      ].join('');
+    }
+
+    function runnerMarkup(seed) {
+      const value = escapeHtml(seed || defaultRunnerCode);
+      return `
+        <details class="question-runner">
+          <summary>Open Compiler</summary>
+          <div class="runner-body">
+            <div class="runner-note">Compiles with Wandbox using C++17.</div>
+            <div class="runner-grid">
+              <textarea class="runner-code">${value}</textarea>
+              <div class="runner-actions">
+                <button class="run-inline">Compile and Run</button>
+                <button class="secondary clear-inline">Clear Output</button>
+                <button class="secondary reset-inline" data-seed="${encodeURIComponent(seed || defaultRunnerCode)}">Reset Snippet</button>
+              </div>
+              <div class="output runner-output">Runner idle.</div>
+            </div>
+          </div>
+        </details>`;
+    }
+
+    function render() {
+      const selectedExam = examFilter.value || 'all';
+      const selectedType = typeFilter.value;
+      const term = searchBox.value.trim().toLowerCase();
+      const filteredExams = (selectedExam === 'all' ? exams : exams.filter(exam => exam.file === selectedExam)).map(exam => {
+        const match = item => {
+          const blob = [item.prompt, item.code, item.sample, item.answer, ...(item.options || [])].join(' ').toLowerCase();
+          return !term || blob.includes(term);
+        };
+        return {
+          ...exam,
+          mcq: selectedType === 'coding' ? [] : exam.mcq.filter(match),
+          coding: selectedType === 'mcq' ? [] : exam.coding.filter(match)
+        };
+      }).filter(exam => exam.mcq.length || exam.coding.length);
+
+      if (!filteredExams.length) {
+        content.innerHTML = '<p>No matching questions.</p>';
+        renderStats();
+        return;
+      }
+
+      content.innerHTML = filteredExams.map(exam => {
+        const mcqHtml = exam.mcq.map(item => {
+          const picked = savedAnswers[answerKey(exam.file, item.q)] || '';
+          const checked = !!savedAnswers[checkKey(exam.file, 'mcq', item.q)];
+          const seed = item.code || defaultRunnerCode;
+          const options = item.options.map((opt, idx) => {
+            const id = optionId(exam.file, item.q, idx);
+            return `
+              <label class="option" for="${escapeHtml(id)}">
+                <input type="radio" name="${escapeHtml(answerKey(exam.file, item.q))}" id="${escapeHtml(id)}" value="${escapeHtml(opt)}" ${picked === opt ? 'checked' : ''}>
+                <span>${escapeHtml(opt)}</span>
+              </label>`;
+          }).join('');
+          return `
+            <article class="question ${checked ? 'done' : ''}" data-file="${escapeHtml(exam.file)}" data-q="${item.q}" data-type="mcq">
+              <div class="qhead">
+                <div class="qtitle">
+                  <h3>Q${item.q}</h3>
+                  <div>${escapeHtml(item.prompt)}</div>
+                </div>
+                <div class="question-tools">
+                  <span class="tag">MCQ</span>
+                  <button class="mini-btn check-answer-btn" type="button">Check</button>
+                  <label class="done-toggle"><input type="checkbox" class="check-question" ${checked ? 'checked' : ''}> Done</label>
+                </div>
+              </div>
+              ${item.code ? `<pre>${escapeHtml(item.code)}</pre>` : ''}
+              <div class="options">${options}</div>
+              ${item.selected ? `<div class="hint">Visible scanned answer: ${escapeHtml(item.selected)}</div>` : ''}
+              <div class="check-result"></div>
+              ${runnerMarkup(seed)}
+            </article>`;
+        }).join('');
+
+        const codingHtml = exam.coding.map(item => {
+          const checked = !!savedAnswers[checkKey(exam.file, 'coding', item.q)];
+          const seed = item.sample || item.answer || '';
+          return `
+            <article class="question ${checked ? 'done' : ''}" data-file="${escapeHtml(exam.file)}" data-q="${item.q}" data-type="coding">
+              <div class="qhead">
+                <div class="qtitle">
+                  <h3>Q${item.q}</h3>
+                  <div>${escapeHtml(item.prompt)}</div>
+                </div>
+                <div class="question-tools">
+                  <span class="tag">Coding</span>
+                  <button class="mini-btn check-answer-btn" type="button">Check</button>
+                  <label class="done-toggle"><input type="checkbox" class="check-question" ${checked ? 'checked' : ''}> Done</label>
+                </div>
+              </div>
+              ${item.sample ? `<pre>${escapeHtml(item.sample)}</pre>` : ''}
+              ${item.answer ? `<div class="answer"><strong>Scanned answer summary:</strong> ${escapeHtml(item.answer)}</div>` : ''}
+              <div class="check-result"></div>
+              ${runnerMarkup(seed)}
+            </article>`;
+        }).join('');
+
+        return `
+          <section class="exam-card">
+            <div class="exam-head">
+              <div>
+                <h2>${escapeHtml(exam.title)}</h2>
+                <div class="exam-meta">${escapeHtml(exam.file)} | ${exam.mcq.length} MCQ | ${exam.coding.length} coding</div>
+              </div>
+              <a href="${encodeURIComponent(exam.file)}" target="_blank" rel="noopener">Open PDF</a>
+            </div>
+            ${exam.mcq.length ? `<div class="section"><h3>Multiple Choice</h3>${mcqHtml}</div>` : ''}
+            ${exam.coding.length ? `<div class="section"><h3>Coding Prompts</h3>${codingHtml}</div>` : ''}
+          </section>`;
+      }).join('');
+
+      content.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', event => {
+          const article = event.target.closest('[data-file]');
+          saveAnswer(article.dataset.file, article.dataset.q, event.target.value);
+        });
+      });
+
+      content.querySelectorAll('.check-question').forEach(input => {
+        input.addEventListener('change', event => {
+          const article = event.target.closest('[data-file]');
+          article.classList.toggle('done', event.target.checked);
+          saveChecked(article.dataset.file, article.dataset.type, article.dataset.q, event.target.checked);
+        });
+      });
+
+      content.querySelectorAll('.check-answer-btn').forEach(button => {
+        button.addEventListener('click', event => {
+          const article = event.target.closest('[data-file]');
+          const result = article.querySelector('.check-result');
+          article.classList.remove('correct-state', 'incorrect-state');
+          result.className = 'check-result show';
+
+          if (article.dataset.type === 'mcq') {
+            const picked = article.querySelector('input[type="radio"]:checked');
+            const exam = exams.find(item => item.file === article.dataset.file);
+            const question = exam && exam.mcq.find(item => String(item.q) === article.dataset.q);
+
+            if (!picked) {
+              result.textContent = 'Pick an option first.';
+              return;
+            }
+            const answerKey = getAnswerKey(article.dataset.file, article.dataset.q);
+            if (!answerKey) {
+              result.textContent = 'No stored answer key for this MCQ.';
+              return;
+            }
+
+            const chosen = picked.value;
+            const normalizedChosen = chosen.toLowerCase().replace(/[`"']/g, '').replace(/\s+/g, ' ').trim();
+            const normalizedAnswer = answerKey.toLowerCase().replace(/[`"']/g, '').replace(/\s+/g, ' ').trim();
+            const likelyMatch = normalizedChosen === normalizedAnswer;
+
+            if (likelyMatch) {
+              article.classList.add('correct-state');
+              result.classList.add('correct');
+              result.textContent = `Correct. Answer: ${answerKey}`;
+            } else {
+              article.classList.add('incorrect-state');
+              result.classList.add('incorrect');
+              result.textContent = `Incorrect. Correct answer: ${answerKey}`;
+            }
+            return;
+          }
+
+          const exam = exams.find(item => item.file === article.dataset.file);
+          const question = exam && exam.coding.find(item => String(item.q) === article.dataset.q);
+          if (question && question.answer) {
+            result.textContent = `Scanned answer summary: ${question.answer}`;
+          } else {
+            result.textContent = 'No stored answer summary for this coding question.';
+          }
+        });
+      });
+
+      content.querySelectorAll('.run-inline').forEach(button => {
+        button.addEventListener('click', event => {
+          const runner = event.target.closest('.question-runner');
+          runCode(runner.querySelector('.runner-code'), runner.querySelector('.runner-output'), button);
+        });
+      });
+
+      content.querySelectorAll('.clear-inline').forEach(button => {
+        button.addEventListener('click', event => {
+          const runner = event.target.closest('.question-runner');
+          runner.querySelector('.runner-output').textContent = 'Runner idle.';
+        });
+      });
+
+      content.querySelectorAll('.reset-inline').forEach(button => {
+        button.addEventListener('click', event => {
+          const runner = event.target.closest('.question-runner');
+          const textarea = runner.querySelector('.runner-code');
+          textarea.value = decodeURIComponent(button.dataset.seed);
+          textarea.focus();
+        });
+      });
+
+      renderStats();
+    }
+
+    function initExamFilter() {
+      examFilter.innerHTML = ['<option value="all">All exams</option>']
+        .concat(exams.map(exam => `<option value="${escapeHtml(exam.file)}">${escapeHtml(exam.title)}</option>`))
+        .join('');
+    }
+
+    initExamFilter();
+    if (localStorage.getItem(sidebarStateKey) === 'true') {
+      sidebar.classList.add('collapsed');
+    }
+    syncSidebarButtons();
+    render();
+
+    examFilter.addEventListener('change', render);
+    typeFilter.addEventListener('change', render);
+    searchBox.addEventListener('input', render);
+    function toggleSidebar() {
+      const collapsed = sidebar.classList.toggle('collapsed');
+      localStorage.setItem(sidebarStateKey, String(collapsed));
+      syncSidebarButtons();
+    }
+
+    toggleSidebarBtn.addEventListener('click', toggleSidebar);
+    topbarSidebarBtn.addEventListener('click', toggleSidebar);
+    clearAnswersBtn.addEventListener('click', () => {
+      Object.keys(savedAnswers).forEach(key => {
+        if (key !== sidebarStateKey) {
+          delete savedAnswers[key];
+        }
+      });
+      localStorage.setItem(storageKey, JSON.stringify(savedAnswers));
+      render();
+    });
+  </script>
+</body>
+</html>
