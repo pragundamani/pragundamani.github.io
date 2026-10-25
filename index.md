@@ -61,31 +61,3 @@ title: Study Hub
 </div>
 
 <a class="repo-link" href="https://github.com/pragundamani/pragundamani.github.io">View this site on GitHub →</a>
-
-<section class="study-section">
-  <h2>Recent posts</h2>
-  {% assign posts = site.posts | sort: 'date' | reverse %}
-  {% if posts.size > 0 %}
-  <ul>
-  {% for post in posts limit: 10 %}
-    <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-  {% endfor %}
-  </ul>
-  {% else %}
-  <p>No posts yet.</p>
-  {% endif %}
-</section>
-
-<section class="study-section">
-  <h2>Notes</h2>
-  {% assign notes = site.notes | sort: 'title' %}
-  {% if notes.size > 0 %}
-  <ul>
-  {% for note in notes limit: 10 %}
-    <li><a href="{{ note.url | relative_url }}">{{ note.title | default: note.basename }}</a></li>
-  {% endfor %}
-  </ul>
-  {% else %}
-  <p>No notes yet.</p>
-  {% endif %}
-</section>
