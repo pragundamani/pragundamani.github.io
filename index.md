@@ -5,14 +5,13 @@ title: Study Hub
 
 <style>
 .study-hero {
-  padding: 2.4rem;
-  margin: .5rem 0 2rem;
+  padding: 1.6rem;
+  margin: .25rem 0 1.6rem;
   color: #f8fafc;
-  background: linear-gradient(135deg, #172554, #1d4ed8 58%, #0891b2);
-  border-radius: 1.25rem;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, .18);
+  background: #1d4ed8;
+  border-radius: .85rem;
 }
-.study-hero h1 { margin: 0 0 .6rem; font-size: clamp(2rem, 7vw, 3.6rem); }
+.study-hero h1 { margin: 0 0 .4rem; font-size: clamp(1.8rem, 6vw, 2.8rem); }
 .study-hero p { max-width: 42rem; margin: 0; color: #dbeafe; font-size: 1.08rem; }
 .study-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 0 0 2rem; }
 .study-card {
@@ -21,12 +20,12 @@ title: Study Hub
   color: #0f172a !important;
   background: #fff;
   border: 1px solid #dbe3ef;
-  border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+  border-radius: .75rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .07);
   text-decoration: none !important;
   transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
 }
-.study-card:hover { transform: translateY(-3px); border-color: #60a5fa; box-shadow: 0 14px 32px rgba(15, 23, 42, .14); }
+.study-card:hover { transform: translateY(-2px); border-color: #60a5fa; box-shadow: 0 8px 20px rgba(15, 23, 42, .11); }
 .study-card strong { display: block; margin-bottom: .35rem; color: #1d4ed8; font-size: 1.1rem; }
 .study-card span { color: #475569; line-height: 1.5; }
 .study-section { margin-top: 2rem; }
