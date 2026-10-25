@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Home
+title: Previous Home Links
+permalink: /home-links.html
 ---
 
 # Home
