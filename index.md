@@ -1,12 +1,12 @@
 ---
 layout: page
-title: Previous Home Links
-permalink: /home-links.html
+title: Home
 ---
 
 # Home
 
 ## Pages
+- [EMF midterm practice](/emf.html)
 - [OOP c++ practice](/oops.html)
 - [Mobile physics practice page](/mobile-physics.html)
 - [Notes](/notes/)
