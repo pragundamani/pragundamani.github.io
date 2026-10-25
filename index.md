@@ -7,6 +7,7 @@ title: Home
 
 ## Pages
 - [EMF midterm practice](/emf.html)
+- [CS 1134 DSA exam practice](/dsa_exam_practice.html)
 - [OOP c++ practice](/oops.html)
 - [Mobile physics practice page](/mobile-physics.html)
 - [Notes](/notes/)
