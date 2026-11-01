@@ -61,6 +61,11 @@
     .setup { color: var(--muted); line-height: 1.6; }
     .setup summary { color: var(--text); cursor: pointer; font-weight: 800; }
     .setup code, code { color: #bfdbfe; }
+    .chapter-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .chapter-link { display: block; color: var(--text); text-decoration: none; background: var(--panel-2); border: 1px solid var(--line); border-radius: 13px; padding: 12px; }
+    .chapter-link:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .chapter-link strong { display: block; color: var(--accent-2); }
+    .chapter-link span { display: block; margin-top: 4px; color: var(--muted); font-size: .82rem; line-height: 1.35; }
     .sync-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
     .sync-controls input { min-width: 190px; color: var(--text); background: #0a1121; border: 1px solid var(--line); border-radius: 11px; padding: 10px 12px; }
     #syncStatus { color: var(--muted); font-size: .85rem; }
@@ -128,7 +133,7 @@
       .hero { border-radius: 18px; }
       .toolbar { grid-template-columns: 1fr 1fr; }
       .toolbar input { grid-column: 1 / -1; }
-      .stats { grid-template-columns: 1fr; }
+      .stats, .chapter-links { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -164,6 +169,17 @@
         <input id="syncUser" type="text" autocomplete="username" placeholder="Your name" aria-label="Progress sync name">
         <button class="button primary" id="syncButton" type="button">Load / sync progress</button>
         <span id="syncStatus" role="status">Progress is saved on this device.</span>
+      </div>
+    </section>
+
+    <section class="panel setup" aria-labelledby="chapterReviewsTitle">
+      <strong id="chapterReviewsTitle">Chapter review PDFs</strong>
+      <p>Open the additional Cengage chapter-review problems in a new tab.</p>
+      <div class="chapter-links">
+        <a class="chapter-link" href="ch14.pdf" target="_blank" rel="noopener"><strong>Chapter 14</strong><span>Fluid Mechanics</span></a>
+        <a class="chapter-link" href="ch22.pdf" target="_blank" rel="noopener"><strong>Chapter 22</strong><span>Electric Fields</span></a>
+        <a class="chapter-link" href="ch23.pdf" target="_blank" rel="noopener"><strong>Chapter 23</strong><span>Continuous Charge Distributions and Gauss’s Law</span></a>
+        <a class="chapter-link" href="ch24.pdf" target="_blank" rel="noopener"><strong>Chapter 24</strong><span>Electric Potential</span></a>
       </div>
     </section>
 
